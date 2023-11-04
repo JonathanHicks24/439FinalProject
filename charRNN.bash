@@ -2,8 +2,11 @@
 git clone https://github.com/sherjilozair/char-rnn-tensorflow.git
 cd char-rnn-tensorflow
 
-# Installing Requirements
-pip install -r requirements.txt
+# Making the Required Directories
+mkdir data
+cd data
+mkdir passwords
+cd ..
 
 # Char-rnn library training command (assuming the below command structure)
 # char-rnn-tensorflow/
