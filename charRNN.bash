@@ -3,7 +3,6 @@ git clone https://github.com/sherjilozair/char-rnn-tensorflow.git
 cd char-rnn-tensorflow
 
 # Making the Required Directories
-mkdir data
 cd data
 mkdir passwords
 cd ..
