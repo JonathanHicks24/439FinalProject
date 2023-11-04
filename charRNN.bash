@@ -13,4 +13,4 @@ pip install -r requirements.txt
 python train.py --data_dir ./data/passwords --save_dir ./save
 
 # Running the graphing Software (access at http://localhost:6006)
-tensorboard --logdir=path/to/log-directory
+tensorboard --logdir=./logs/
