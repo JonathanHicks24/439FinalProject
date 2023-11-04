@@ -68,7 +68,7 @@ class Model():
     # other functions such as sample, etc.
     # ...
 
-# Model usage example
-args = ... # set your arguments here
-model = Model(args)
-model.model.fit(dataset, epochs=10, callbacks=model.callbacks)
+# # Model usage example
+# args = ... # set your arguments here
+# model = Model(args)
+# model.model.fit(dataset, epochs=10, callbacks=model.callbacks)
