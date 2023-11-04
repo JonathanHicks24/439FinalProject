@@ -5,7 +5,7 @@ cd char-rnn-tensorflow
 # Installing Requirements
 pip install -r requirements.txt
 
-# Char-rnn character command (assuming below command structure)
+# Char-rnn library training command (assuming the below command structure)
 # char-rnn-tensorflow/
 #     data/
 #         passwords/
