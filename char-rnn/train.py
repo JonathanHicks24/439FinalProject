@@ -5,13 +5,14 @@ from __future__ import print_function
 import argparse
 import time
 import os
+import re
 from six.moves import cPickle
 
 
 parser = argparse.ArgumentParser(
                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 # Data and model checkpoints directories
-parser.add_argument('--data_dir', type=str, default='data/tinyshakespeare',
+parser.add_argument('--data_dir', type=str, default='data/passwords',
                     help='data directory containing input.txt with training examples')
 parser.add_argument('--save_dir', type=str, default='save',
                     help='directory to store checkpointed models')
@@ -32,9 +33,9 @@ parser.add_argument('--init_from', type=str, default=None,
 # Model params
 parser.add_argument('--model', type=str, default='lstm',
                     help='lstm, rnn, gru, or nas')
-parser.add_argument('--rnn_size', type=int, default=128,
+parser.add_argument('--rnn_size', type=int, default=1024,
                     help='size of RNN hidden state')
-parser.add_argument('--num_layers', type=int, default=2,
+parser.add_argument('--num_layers', type=int, default=3,
                     help='number of layers in the RNN')
 # Optimization
 parser.add_argument('--seq_length', type=int, default=50,
@@ -108,12 +109,20 @@ def train(args):
         # restore model
         if args.init_from is not None:
             saver.restore(sess, ckpt)
-        for e in range(args.num_epochs):
+            match = re.search(r"model\.ckpt-(\d+)", ckpt)
+            if match:
+                global_step = int(match.group(1))
+                start_epoch = global_step // data_loader.num_batches
+                start_batch = global_step % data_loader.num_batches
+            print("Resuming from epoch {}, batch {}, global step {}".format(start_epoch, start_batch, global_step))
+
+        for e in range(start_epoch, args.num_epochs):
+            # print("Here's e:" + str(e))
             sess.run(tf.assign(model.lr,
                                args.learning_rate * (args.decay_rate ** e)))
             data_loader.reset_batch_pointer()
             state = sess.run(model.initial_state)
-            for b in range(data_loader.num_batches):
+            for b in range(start_batch if e == start_epoch else 0, data_loader.num_batches):
                 start = time.time()
                 x, y = data_loader.next_batch()
                 feed = {model.input_data: x, model.targets: y}
